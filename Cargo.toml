@@ -2,7 +2,7 @@
 resolver = "2"
 members = ["projects/*"]
 default-members = [
-    "projects/valkyrie-runtime",
+    "projects/runtime",
 ]
 exclude = [
     "projects/.DS_Store",

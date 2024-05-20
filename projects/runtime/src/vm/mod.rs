@@ -6,7 +6,7 @@ use wasmtime::{
 };
 use wasmtime_wasi::{WasiCtx, WasiCtxBuilder, WasiView};
 
-use crate::{host::NyarExtension, Debugger};
+use crate::{host::NyarExtension};
 
 pub struct NyarVM {
     store: Store<ContextView>,
@@ -62,8 +62,8 @@ async fn get_component(engine: Engine, input: Component) -> anyhow::Result<NyarV
     let instance = {
         let mut linker = Linker::<ContextView>::new(&engine);
         linker.allow_shadowing(true);
-        wasmtime_wasi::command::add_to_linker(&mut linker)?;
-        Debugger::add_to_linker(&mut linker, |state| &mut state.extension)?;
+        wasmtime_wasi::add_to_linker_async(&mut linker)?;
+        crate::w::unstable::printer::add_to_linker(&mut linker, |state| &mut state.extension)?;
         linker.instantiate_async(&mut store, &input).await?
     };
     Ok(NyarVM { store, instance })

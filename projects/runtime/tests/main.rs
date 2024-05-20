@@ -1,6 +1,6 @@
 use std::path::Path;
-
 use nyar_runtime::NyarVM;
+
 
 #[tokio::test]
 async fn main() -> anyhow::Result<()> {

@@ -1,7 +1,7 @@
-package valkyrie: unstable;
+package w:unstable;
 
 world unstable {
-    import exports;
+    import printer;
     import utf8;
     import integer;
 }
@@ -23,11 +23,11 @@ interface printer {
 
 interface utf8 {
     resource utf8-buffer {
-        constructor(string: string);
+        constructor(%string: string);
         print: func();
     }
     resource utf8-view {
-        constructor(string: string);
+        constructor(%string: string);
         print: func();
     }
 }

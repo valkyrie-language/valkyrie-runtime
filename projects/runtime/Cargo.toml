@@ -11,20 +11,19 @@ license = "MPL-2.0"
 edition = "2021"
 exclude = ["package.json", "tests/**"]
 
-[lib]
-crate-type = ["cdylib"]
-
 [dependencies]
 anyhow = "1.0"
 wat = "1.201.0"
 
 [dependencies.wasmtime-wasi]
-version = "20.0.0"
+version = "*"
 features = []
+git = "https://github.com/bytecodealliance/wasmtime"
 
 [dependencies.wasmtime]
-version = "20.0.0"
-features = ["component-model", "async"]
+version = "*"
+features = ["component-model", "async", "gc"]
+git = "https://github.com/bytecodealliance/wasmtime"
 
 [dev-dependencies]
 tokio = { version = "1.36.0", features = ["full"] }
