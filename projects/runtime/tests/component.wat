@@ -39,6 +39,52 @@
     (core module $Main
         (import "w:unstable/printer" "print-i32" (func $print_i32 (param $value i32)))
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
+        (rec
+            (type $Point2D^psyche (sub (struct
+                (field $x_get funcref)
+                (field $y_get funcref)
+            )))
+            (type $Point2D^physis (struct
+                (field $_x i32)
+                (field $_y i32)
+            ))
+            (type $Point2D^physic (sub $Point2D^psyche (struct
+                (field $x_get funcref)
+                (field $y_get funcref)
+                (field $_x i32)
+                (field $_y i32)
+            )))
+            ;; Point3D <: Point2D
+            (type $Point3D^psyche (sub $Point2D^psyche (struct
+                (field $x_get funcref)
+                (field $y_get funcref)
+                (field $z_get funcref)
+            )))
+        )
+        ;; 假设我们有两个获取 x 和 y 的函数
+        (func $x_get_mock
+            (result i32)
+            ;; 函数体省略，假设返回某个 i32 值
+            i32.const 42
+        )
+        (func $y_get_mock
+            (result i32)
+            ;; 函数体省略，假设返回某个 i32 值
+            i32.const 24
+        )
+        ;; 导出函数创建 $Point2D^physic 实例
+        (func
+            (result anyref)
+;;             获取函数引用
+;;            ref.func $x_get_mock
+;;            ref.func $y_get_mock
+;;             初始化 i32 字段值
+            i32.const 10  ;; $_x
+            i32.const 20  ;; $_y
+;;             创建 $Point2D^physic 实例
+            struct.new $Point2D^physis
+        )
+
         (func $auto_drop
             (result i32 i32)
             i32.const 1
