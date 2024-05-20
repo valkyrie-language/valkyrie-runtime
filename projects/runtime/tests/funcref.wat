@@ -1,5 +1,6 @@
 (component $App
     (core module $Main
+        (table 1 (ref $i32-i32) (ref.func $inc))
         (type $i32-i32 (func (param i32) (result i32)))
 
         (func $hof (param $f (ref $i32-i32)) (result i32)
