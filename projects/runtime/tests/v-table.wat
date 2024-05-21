@@ -37,7 +37,6 @@
         string-encoding=utf8
     ))
     (core module $Main
-;;        (type $i32-i32 (func (param i32) (result i32)))
         (import "w:unstable/printer" "print-i32" (func $print_i32 (param $value i32)))
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
         (rec
@@ -46,12 +45,62 @@
                 (field $x-getter funcref)
                 (field $x-setter funcref)
             )))
+            (type $Point2D::Physis (struct
+                (field $_x (mut i32))
+            ))
+            (type $Point2D::Physic (sub $Point2D::Psyche (struct
+                (field $constructor funcref)
+                (field $x-getter funcref)
+                (field $x-setter funcref)
+                (field $_x i32)
+            )))
+            (type $Point2D::Corpus (struct
+                (field $psyche (ref $Point2D::Psyche))
+                (field $physis (ref $Point2D::Physis))
+            ))
         )
         (table funcref (elem
 ;;            $constructor
-;;            $get_x
-;;            $set_x
+            $Point2D::Physic::x-getter
+            $Point2D::Psyche::x-getter
         ))
+        (func $Point2D::Physic::x-getter
+            (param $self (ref $Point2D::Physic))
+            (result i32)
+            (struct.get $Point2D::Physic $_x (local.get $self))
+        )
+        (func $Point2D::Psyche::x-getter
+            (param $self (ref $Point2D::Psyche))
+            (result i32)
+            ref.cast (ref $Point2D::Physic)
+            local.get $self
+            call $Point2D::Physic::x-getter
+        )
+
+;;        (func $set_x
+;;            (param $self (ref $Point2D^psyche))
+;;            (param $value i32)
+;;          local.get $value
+;;          drop
+;;        )
+;;        (func $constructor
+;;            (param $value i32)
+;;          (result (ref $Point2D^psyche))
+;;            ref.func $constructor
+;;            ref.func $get_x
+;;            ref.func $set_x
+;;            local.get $value
+;;            global.get $A::MANUFACTURE
+;;            drop drop drop drop
+;;          struct.new $Point2D^physis
+;;        )
+;;        (global $A::MANUFACTURE
+;;            (ref $Point2D^psyche)
+;;            ref.func $constructor
+;;            ref.func $get_x
+;;            ref.func $set_x
+;;            struct.new $A
+;;        )
 ;; static A.INITIALIZED
         (global $A.INITIALIZED (mut i32) (i32.const 0))
         (func $A.INITIALIZED
