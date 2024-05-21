@@ -42,47 +42,77 @@
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
         (rec
             (type $Point2D^psyche (sub (struct
-                (field $x_get funcref)
-                (field $y_get funcref)
+                (field $constructor funcref)
+                (field $get_x funcref)
+                (field $set_x funcref)
             )))
             (type $Point2D^physis (struct
-                (field $_x i32)
-                (field $_y i32)
+                (field $_x (mut i32))
             ))
             (type $Point2D^physic (sub $Point2D^psyche (struct
-                (field $x_get funcref)
-                (field $y_get funcref)
+                (field $constructor funcref)
+                (field $get_x funcref)
+                (field $set_x funcref)
                 (field $_x i32)
-                (field $_y i32)
             )))
             ;; Point3D <: Point2D
             (type $Point3D^psyche (sub $Point2D^psyche (struct
-                (field $x_get funcref)
-                (field $y_get funcref)
-                (field $z_get funcref)
+                (field $constructor funcref)
+                (field $get_x funcref)
+                (field $set_x funcref)
             )))
         )
         (table funcref (elem
-            $x_get_mock
-            $y_get_mock
+            $constructor
+            $get_x
+            $set_x
         ))
-        (func $x_get_mock
+        (func $get_x
+            (param $self (ref $Point2D^psyche))
             (result i32)
+;;            local.get $self
+;;            ref.cast (ref $Point2D^physic)
+            ;; type as $Point2D^physic
             i32.const 42
         )
-        (func $y_get_mock
-            (result i32)
-            i32.const 24
+        (func $set_x
+            (param $self (ref $Point2D^psyche))
+            (param $value i32)
+;;          local.get $value
+;;          drop
         )
-        (func
-;;            (result (ref $Point2D^physis))
-            ref.func $x_get_mock
-            ref.func $y_get_mock
-            i32.const 10  ;; $_x
-            i32.const 20  ;; $_y
+        (func $constructor
+            (param $value i32)
+;;          (result (ref $Point2D^psyche))
+            ref.func $constructor
+            ref.func $get_x
+            ref.func $set_x
+            local.get $value
             drop drop drop drop
-;;            struct.new $Point2D^physis
+;;          struct.new $Point2D^physis
         )
+;; static A.INITIALIZED
+        (global $A.INITIALIZED (mut i32) (i32.const 0))
+        (func $A.Initialize
+            (if (global.get $A.initialized)
+                (then return)
+                (else
+                    (global.set $A.initialized (i32.const 1))
+                    ;; 单例初始化逻辑
+                )
+            )
+        )
+        (func $A.Deitialize
+            (if (global.get $A.initialized)
+                (then
+                    (global.set $A.initialized (i32.const 1))
+                    ;; 单例反初始化逻辑
+                )
+                (else return)
+            )
+        )
+
+
         (func $auto_drop
             (result i32 i32)
             i32.const 1
