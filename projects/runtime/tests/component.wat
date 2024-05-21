@@ -61,12 +61,18 @@
                 (field $get_x funcref)
                 (field $set_x funcref)
             )))
+            (type $vec3d (array (mut f64)))
         )
         (table funcref (elem
             $constructor
             $get_x
             $set_x
         ))
+;;        (func $get_x_inline
+;;            (param $self (ref $Point2D^physic))
+;;            (result i32)
+;;            (struct.get $Point2D^physic $_x (local.get $self))
+;;        )
         (func $get_x
             (param $self (ref $Point2D^psyche))
             (result i32)
@@ -75,6 +81,9 @@
             ;; type as $Point2D^physic
             i32.const 42
         )
+
+
+
         (func $set_x
             (param $self (ref $Point2D^psyche))
             (param $value i32)
@@ -88,24 +97,33 @@
             ref.func $get_x
             ref.func $set_x
             local.get $value
+;;            global.get $A::MANUFACTURE
+
             drop drop drop drop
 ;;          struct.new $Point2D^physis
         )
+;;        (global $A::MANUFACTURE
+;;            (ref $Point2D^psyche)
+;;            ref.func $constructor
+;;            ref.func $get_x
+;;            ref.func $set_x
+;;            struct.new $A
+;;        )
 ;; static A.INITIALIZED
         (global $A.INITIALIZED (mut i32) (i32.const 0))
-        (func $A.Initialize
-            (if (global.get $A.initialized)
+        (func $A.INITIALIZED
+            (if (global.get $A.INITIALIZED)
                 (then return)
                 (else
-                    (global.set $A.initialized (i32.const 1))
+                    (global.set $A.INITIALIZED (i32.const 1))
                     ;; 单例初始化逻辑
                 )
             )
         )
         (func $A.Deitialize
-            (if (global.get $A.initialized)
+            (if (global.get $A.INITIALIZED)
                 (then
-                    (global.set $A.initialized (i32.const 1))
+                    (global.set $A.INITIALIZED (i32.const 1))
                     ;; 单例反初始化逻辑
                 )
                 (else return)
