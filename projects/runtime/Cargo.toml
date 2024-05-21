@@ -13,7 +13,7 @@ exclude = ["package.json", "tests/**"]
 
 [dependencies]
 anyhow = "1.0"
-wat = "1.201.0"
+wat = "1.208.1"
 
 [dependencies.wasmtime-wasi]
 version = "*"

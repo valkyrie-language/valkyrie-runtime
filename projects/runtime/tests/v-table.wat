@@ -60,66 +60,60 @@
             ))
         )
         (table funcref (elem
-;;            $constructor
-            $Point2D::Physic::x-getter
-            $Point2D::Psyche::x-getter
+            $Point2D::Physic::%consturctor
+            $Point2D::Physic::x%getter
+            $Point2D::Physic::x%setter
+
+            $Point2D::Psyche::%consturctor
+            $Point2D::Psyche::x%getter
+            $Point2D::Psyche::x%setter
         ))
-        (func $Point2D::Physic::x-getter
+
+        (global $Point2D::Physic::GREEN_FIELD
+            (ref $Point2D::Physic)
+            ref.func $Point2D::Physic::%consturctor
+            ref.func $Point2D::Physic::x%getter
+            ref.func $Point2D::Physic::x%setter
+            i32.const 0
+            struct.new $Point2D::Physic
+        )
+        (func $Point2D::Physic::%consturctor
+            (param $value i32)
+            (result (ref $Point2D::Physic))
+            (global.get $Point2D::Physic::GREEN_FIELD)
+        )
+        (func $Point2D::Physic::x%getter
             (param $self (ref $Point2D::Physic))
             (result i32)
             (struct.get $Point2D::Physic $_x (local.get $self))
         )
-        (func $Point2D::Psyche::x-getter
+        (func $Point2D::Physic::x%setter
+            (param $self (ref $Point2D::Physic))
+            (param $value i32)
+            (struct.set $Point2D::Physic $_x (local.get $self))
+        )
+        ;; 虚表虚方法
+        (func $Point2D::Psyche::%consturctor
+            (param $value i32)
+            (result (ref $Point2D::Psyche))
+            local.get $value
+            call $Point2D::Physic::%consturctor
+            ref.cast (ref $Point2D::Psyche)
+        )
+        ;; 好像没用, 理论上自动获得这些虚方法
+        (func $Point2D::Psyche::x%getter
             (param $self (ref $Point2D::Psyche))
             (result i32)
             ref.cast (ref $Point2D::Physic)
             local.get $self
-            call $Point2D::Physic::x-getter
+            call $Point2D::Physic::x%getter
         )
-
-;;        (func $set_x
-;;            (param $self (ref $Point2D^psyche))
-;;            (param $value i32)
-;;          local.get $value
-;;          drop
-;;        )
-;;        (func $constructor
-;;            (param $value i32)
-;;          (result (ref $Point2D^psyche))
-;;            ref.func $constructor
-;;            ref.func $get_x
-;;            ref.func $set_x
-;;            local.get $value
-;;            global.get $A::MANUFACTURE
-;;            drop drop drop drop
-;;          struct.new $Point2D^physis
-;;        )
-;;        (global $A::MANUFACTURE
-;;            (ref $Point2D^psyche)
-;;            ref.func $constructor
-;;            ref.func $get_x
-;;            ref.func $set_x
-;;            struct.new $A
-;;        )
-;; static A.INITIALIZED
-        (global $A.INITIALIZED (mut i32) (i32.const 0))
-        (func $A.INITIALIZED
-            (if (global.get $A.INITIALIZED)
-                (then return)
-                (else
-                    (global.set $A.INITIALIZED (i32.const 1))
-                    ;; 单例初始化逻辑
-                )
-            )
-        )
-        (func $A.Deitialize
-            (if (global.get $A.INITIALIZED)
-                (then
-                    (global.set $A.INITIALIZED (i32.const 1))
-                    ;; 单例反初始化逻辑
-                )
-                (else return)
-            )
+        (func $Point2D::Psyche::x%setter
+            (param $self (ref $Point2D::Psyche))
+            (param $value i32)
+            ref.cast (ref $Point2D::Physic)
+            local.get $self
+            call $Point2D::Physic::x%setter
         )
 
 
@@ -133,7 +127,9 @@
             drop
         )
         (func $main
-            i32.const 1
+            i32.const 42
+            call $Point2D::Psyche::%consturctor
+            call $Point2D::Psyche::x%getter
             call $print_i32
             i32.const 0
             i32.const 0
