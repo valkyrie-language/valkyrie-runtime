@@ -57,24 +57,30 @@
             )
         )
 
-        (func $print-first (export "print-first") (param $n i32) (param $k (ref $cont))
+        (func $print-first (param $n i32) (param $k (ref $cont))
             (loop $l
                 (block $on_yield
                     (result i32 (ref $cont))
                     (if (local.get $n)
-                        (then (resume $cont (tag $yield $on_yield) (local.get $k)))
+                        (then
+                            (resume $cont
+                                (tag $yield $on_yield)
+                                (local.get $k))
+                            )
+                        (else
+                            nop
+                        )
                     )
                     (return)
                 ) ;;   $on_yield (result i32 (ref $cont))
                 (local.set $k)
-                (call $print_i32)
+                drop
+;;                (call $print_i32)
                 (local.set $n (i32.add (local.get $n) (i32.const -1)))
                 (br $l)
             )
             (unreachable)
         )
-
-
         (func $main
             (local $G (ref $cont))
             (local $n i32)
@@ -92,6 +98,7 @@
                 (local.get $G)
             )
             drop drop
+;;          (call $print-first (i32.const 42) (cont.new $cont (ref.func $naturals)))
         )
         (start $main)
     )
