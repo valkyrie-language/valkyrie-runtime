@@ -14,8 +14,7 @@ gen1()
 ```
 
 
-yield T
-
+(ref $cont) = Generator<Item=i32>
 
 ```wat
 (type $func (func))
@@ -31,7 +30,6 @@ yield T
     )
 )
 (func $main
-    (local $gen1 i32)
     (cont.new $cont (ref.func $naturals)))
 )
 ```
@@ -42,5 +40,44 @@ yield break with
 yield from with
 
 
+```vk
+loop {
+    if next_k == null { 
+        return
+    }
+    catch next_k() {
+        Yield() => {
+            resume ^next_k enqueue()
+            continue
+        }
+        Fork() => {
+            resume ^next_k dequeue()
+            continue
+        }
+    }
+}
+```
 
-
+```wat
+(func $sync (export "sync") (param $nextk (ref null $cont))
+    (loop $l
+      (if (ref.is_null (local.get $nextk)) (then (return)))
+      (block $on_yield (result (ref $cont))
+        (block $on_fork (result (ref $cont) (ref $cont))
+          (resume $cont (tag $yield $on_yield)
+                        (tag $fork $on_fork)
+                        (local.get $nextk)
+          )
+          (local.set $nextk (call $dequeue))
+          (br $l)  ;; thread terminated
+        ) ;;   $on_fork (result (ref $cont) (ref $cont))
+        (local.set $nextk)                      ;; current thread
+        (call $enqueue) ;; new thread
+        (br $l)
+      )
+      ;;     $on_yield (result (ref $cont))
+      (local.set $nextk)  ;; carry on with current thread
+      (br $l)
+    )
+)
+```

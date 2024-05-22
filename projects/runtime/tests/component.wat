@@ -47,6 +47,8 @@
                 (field $x-setter funcref)
             )))
         )
+
+
         (table funcref (elem
 ;;            $constructor
 ;;            $get_x

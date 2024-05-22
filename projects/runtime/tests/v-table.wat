@@ -59,7 +59,17 @@
                 (field $physis (ref $Point2D::Physis))
             ))
         )
-        (table funcref (elem
+;;        (table funcref (elem
+;;            $Point2D::Physic::%consturctor
+;;            $Point2D::Physic::x%getter
+;;            $Point2D::Physic::x%setter
+;;
+;;            $Point2D::Psyche::%consturctor
+;;            $Point2D::Psyche::x%getter
+;;            $Point2D::Psyche::x%setter
+;;        ))
+
+        (elem declare func
             $Point2D::Physic::%consturctor
             $Point2D::Physic::x%getter
             $Point2D::Physic::x%setter
@@ -67,7 +77,7 @@
             $Point2D::Psyche::%consturctor
             $Point2D::Psyche::x%getter
             $Point2D::Psyche::x%setter
-        ))
+        )
 
         (global $Point2D::Physic::GREEN_FIELD
             (ref $Point2D::Physic)

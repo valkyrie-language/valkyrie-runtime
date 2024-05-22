@@ -48,6 +48,10 @@ fn get_engine() -> anyhow::Result<Engine> {
         config.wasm_reference_types(true);
         config.wasm_memory64(true);
     }
+    {
+        config.wasm_exceptions(true);
+        config.wasm_typed_continuations(true);
+    }
     Engine::new(&config)
 }
 

@@ -12,18 +12,18 @@ edition = "2021"
 exclude = ["package.json", "tests/**"]
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.*"
 wat = "1.208.1"
+
+[dependencies.wasmtime]
+version = "*"
+features = ["component-model", "async", "gc", "wasmfx_baseline"]
+git = "https://github.com/wasmfx/wasmfxtime"
 
 [dependencies.wasmtime-wasi]
 version = "*"
 features = []
-git = "https://github.com/bytecodealliance/wasmtime"
-
-[dependencies.wasmtime]
-version = "*"
-features = ["component-model", "async", "gc"]
-git = "https://github.com/bytecodealliance/wasmtime"
+git = "https://github.com/wasmfx/wasmfxtime"
 
 [dev-dependencies]
 tokio = { version = "1.36.0", features = ["full"] }
