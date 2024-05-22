@@ -17,3 +17,11 @@ async fn test_yield() -> anyhow::Result<()> {
     NyarVM::load_path(&here.join("tests/yield.wat")).await?;
     Ok(())
 }
+
+
+#[tokio::test]
+async fn test_catch() -> anyhow::Result<()> {
+    let here = Path::new(env!("CARGO_MANIFEST_DIR"));
+    NyarVM::load_path(&here.join("tests/catch.wat")).await?;
+    Ok(())
+}
