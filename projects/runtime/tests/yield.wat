@@ -40,16 +40,14 @@
         (import "w:unstable/printer" "print-i32" (func $print_i32 (param $value i32)))
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
         (tag $yield (param i32))
-        (type $Point2D::Physic (struct))
-        (table funcref (elem
-;;            $constructor
-;;            $get_x
-;;            $set_x
-        ))
+        (type $func (func))
+        (type $cont (cont $func))
+        ;; naturals() -> Generator<i32, Return=()>
         (func $naturals (export "naturals")
             (local $n i32)
             (loop $l
-;;                struct.new $Point2D::Physic
+                ;; print(n)
+                (call $print_i32 (local.get $n))
                 ;; yield n
                 (suspend $yield (local.get $n))
                 ;; n += 1
@@ -59,11 +57,40 @@
             )
         )
 
+        (func $print-first (export "print-first") (param $n i32) (param $k (ref $cont))
+            (loop $l
+                (block $on_yield
+                    (result i32 (ref $cont))
+                    (if (local.get $n)
+                        (then (resume $cont (tag $yield $on_yield) (local.get $k)))
+                    )
+                    (return)
+                ) ;;   $on_yield (result i32 (ref $cont))
+                (local.set $k)
+                (call $print_i32)
+                (local.set $n (i32.add (local.get $n) (i32.const -1)))
+                (br $l)
+            )
+            (unreachable)
+        )
+
+
         (func $main
-            i32.const 1
-            call $print_i32
-            i32.const 0
-            i32.const 0
+            (local $G (ref $cont))
+            (local $n i32)
+
+            (local.set $G (cont.new $cont (ref.func $naturals)))
+            (block $on_yield
+                (result i32 (ref $cont))
+                (resume $cont
+                    (tag $yield $on_yield)
+                        (local.get $n)
+                        (local.get $G)
+                )
+                (local.set $n)
+                (local.get $n)
+                (local.get $G)
+            )
             drop drop
         )
         (start $main)

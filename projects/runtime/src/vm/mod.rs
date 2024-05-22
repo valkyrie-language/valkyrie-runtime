@@ -49,7 +49,9 @@ fn get_engine() -> anyhow::Result<Engine> {
         config.wasm_memory64(true);
     }
     {
+        // FIX: exceptions proposal not enabled
         config.wasm_exceptions(true);
+        // FIX: typed continuations support is not enabled
         config.wasm_typed_continuations(true);
     }
     Engine::new(&config)

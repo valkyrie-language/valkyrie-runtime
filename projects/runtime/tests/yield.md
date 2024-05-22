@@ -56,28 +56,18 @@ loop {
         }
     }
 }
-```
 
-```wat
-(func $sync (export "sync") (param $nextk (ref null $cont))
-    (loop $l
-      (if (ref.is_null (local.get $nextk)) (then (return)))
-      (block $on_yield (result (ref $cont))
-        (block $on_fork (result (ref $cont) (ref $cont))
-          (resume $cont (tag $yield $on_yield)
-                        (tag $fork $on_fork)
-                        (local.get $nextk)
-          )
-          (local.set $nextk (call $dequeue))
-          (br $l)  ;; thread terminated
-        ) ;;   $on_fork (result (ref $cont) (ref $cont))
-        (local.set $nextk)                      ;; current thread
-        (call $enqueue) ;; new thread
-        (br $l)
-      )
-      ;;     $on_yield (result (ref $cont))
-      (local.set $nextk)  ;; carry on with current thread
-      (br $l)
-    )
-)
+
+function naturals(): Generator<Item=i32> {
+    let mut n: i32 = 0;
+    loop {
+        yield n;
+        n += 1;
+        continue
+    }
+}
+function main() {
+    let g = naturals();
+    print_i32(g())
+}
 ```

@@ -17,7 +17,7 @@ wat = "1.208.1"
 
 [dependencies.wasmtime]
 version = "*"
-features = ["component-model", "async", "gc", "wasmfx_baseline"]
+features = ["async", "component-model", "gc", "wasmfx_baseline"]
 git = "https://github.com/wasmfx/wasmfxtime"
 
 [dependencies.wasmtime-wasi]
