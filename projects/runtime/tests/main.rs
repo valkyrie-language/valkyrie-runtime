@@ -20,8 +20,8 @@ async fn test_yield() -> anyhow::Result<()> {
 
 
 #[tokio::test]
-async fn test_catch() -> anyhow::Result<()> {
+async fn test_empty_kont() -> anyhow::Result<()> {
     let here = Path::new(env!("CARGO_MANIFEST_DIR"));
-    NyarVM::load_path(&here.join("tests/catch.wat")).await?;
+    NyarVM::load_path(&here.join("tests/kont.wat")).await?;
     Ok(())
 }
