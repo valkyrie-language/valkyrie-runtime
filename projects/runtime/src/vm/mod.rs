@@ -1,14 +1,12 @@
 use std::path::Path;
 
 use wasmtime::{
-    component::{Component, Instance, Linker, ResourceTable},
+    component::{Component, ComponentNamedList, Instance, Lift, Linker, Lower, ResourceTable},
     Config, Engine, Store,
 };
-use wasmtime::component::{ComponentNamedList,  Lift, Lower};
 use wasmtime_wasi::{WasiCtx, WasiCtxBuilder, WasiView};
 
-use crate::{host::NyarExtension};
-use crate::vm::building::ContextView;
+use crate::{host::NyarExtension, vm::building::ContextView};
 
 mod building;
 
@@ -18,10 +16,11 @@ pub struct NyarVM {
 }
 
 impl NyarVM {
-    pub async fn invoke<Params, Results>(&mut self, name: &str, args: Params) -> anyhow::Result<Results> where
-        Params: ComponentNamedList + Lower  + Send + Sync,
-        Results: ComponentNamedList + Lift  + Send + Sync {
-
+    pub async fn invoke<I, O>(&mut self, name: &str, args: I) -> anyhow::Result<O>
+    where
+        I: ComponentNamedList + Lower + Send + Sync,
+        O: ComponentNamedList + Lift + Send + Sync,
+    {
         let f = self.instance.get_typed_func(&mut self.store, name)?;
         f.call_async(&mut self.store, args).await
     }

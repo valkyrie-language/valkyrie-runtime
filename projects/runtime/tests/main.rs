@@ -1,6 +1,5 @@
-use std::path::Path;
 use nyar_runtime::NyarVM;
-
+use std::path::Path;
 
 #[ignore]
 #[tokio::test]
@@ -18,7 +17,6 @@ async fn test_yield() -> anyhow::Result<()> {
     NyarVM::load_path(&here.join("tests/yield.wat")).await?;
     Ok(())
 }
-
 
 #[tokio::test]
 async fn test_empty_kont() -> anyhow::Result<()> {

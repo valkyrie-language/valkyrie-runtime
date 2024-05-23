@@ -17,7 +17,6 @@ impl NyarVM {
         let component = Component::from_file(&engine, path)?;
         get_component(engine, component).await
     }
-
 }
 
 fn get_engine() -> anyhow::Result<Engine> {
