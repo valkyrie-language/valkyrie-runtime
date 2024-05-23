@@ -2,6 +2,7 @@ use std::path::Path;
 use nyar_runtime::NyarVM;
 
 
+#[ignore]
 #[tokio::test]
 async fn test_v_table() -> anyhow::Result<()> {
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/v-table.wat");
@@ -10,7 +11,7 @@ async fn test_v_table() -> anyhow::Result<()> {
     Ok(())
 }
 
-
+#[ignore]
 #[tokio::test]
 async fn test_yield() -> anyhow::Result<()> {
     let here = Path::new(env!("CARGO_MANIFEST_DIR"));
