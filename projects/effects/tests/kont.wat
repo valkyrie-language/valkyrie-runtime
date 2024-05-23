@@ -39,42 +39,21 @@
     (core module $Main
         (import "w:unstable/printer" "print-i32" (func $print_i32 (param $value i32)))
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
-        (tag $e0)
-        (tag $yield (param i32))
-        (type $func (func))
-        (type $cont (cont $func))
-        ;; naturals() -> Generator<i32, Return=()>
-        (func $naturals (export "naturals")
-            (local $n i32)
-            (loop $l
-                ;; print(n)
-                (call $print_i32 (local.get $n))
-                ;; yield n
-                (suspend $yield (local.get $n))
-                ;; n += 1
-                (local.set $n (i32.add (local.get $n) (i32.const 1)))
-                ;; continue
-                (br $l)
-            )
+        (type $ft (func))
+        (type $ct (cont $ft))
+        (elem declare func $noop)
+
+        (func $noop)
+        (func $make-cont (result (ref $ct))
+            (cont.new $ct (ref.func $noop))
+        )
+        (func $f (export "f") (result i32)
+            (call $make-cont)
+            (ref.is_null)
         )
         (func $main
-            (local $G (ref $cont))
-            (local $n i32)
-            (local.set $G (cont.new $cont (ref.func $naturals)))
-            (local.get $G)
+            (call $f)
             drop
-            (block $on_yield
-                (result i32 (ref $cont))
-                (resume $cont
-                    (tag $yield $on_yield)
-                        (local.get $n)
-                        (local.get $G)
-                )
-                (local.set $n)
-                (local.get $n)
-                (local.get $G)
-            )
-            drop drop
         )
         (start $main)
     )

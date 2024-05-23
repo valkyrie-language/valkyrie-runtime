@@ -1,0 +1,20 @@
+[package]
+name = "nyar-effect"
+publish = false
+version = "0.0.1"
+categories = ["wasm"]
+keywords = ["webassembly", "wasm"]
+description = "nyar customized wasi runtime"
+repository = "https://github.com/oovm/vcc"
+documentation = "https://docs.rs/nyar-runtime"
+readme = "readme.md"
+license = "MPL-2.0"
+edition = "2021"
+exclude = ["package.json", "tests/**"]
+
+[dependencies]
+
+[dependencies.reffect]
+version = "*"
+git = "https://github.com/js2xxx/reffect"
+
