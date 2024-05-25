@@ -1,6 +1,7 @@
 #![feature(coroutines)]
 
-use reffect::*;
+use reffect::{effect::EffectList, *};
+use util::Sum;
 
 // 使用结构体来表示effect，而非之前的trait。
 struct Log(String);
@@ -9,6 +10,7 @@ impl Effect for Log {
 }
 
 struct Increment(u32);
+
 impl Effect for Increment {
     type Resume = u32;
 }
@@ -38,11 +40,11 @@ fn test_func() -> u32 {
 fn test() {
     // 使用链式调用来处理各种effects。
     let ret = test_func().handle(handler! {
-    Log(s) => println!("{s}"),
-    Increment(i) if i < 10 => i + 1,
-    Increment(i) => break i,
-});
+        Log(s) => println!("{s}"),
+        Increment(i) if i < 10 => i + 1,
+        Increment(i) => break i,
+    });
 
-// 非传染地直接运行，从类型系统保证了处理过的函数不再包含代数效应。
+    // 非传染地直接运行，从类型系统保证了处理过的函数不再包含代数效应。
     assert_eq!(ret.run(), 2);
 }

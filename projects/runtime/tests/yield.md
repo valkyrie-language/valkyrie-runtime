@@ -110,3 +110,17 @@ class D {
 
 
 
+```valkyrie
+function resume_div(a: u32, b: u32) -> i32 {
+    let good: u32 = catch a / b {
+        case DivideZero(0): resume -2u32
+        case DivideZero(a): return -1i32
+    }
+    good as i32
+}
+
+resume_div(9, 9) # +1, by noraml return
+resume_div(0, 9) #  0, by noraml return
+resume_div(9, 0) # -1, by early return
+resume_div(0, 0) # -2, by resume
+```

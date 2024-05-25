@@ -24,3 +24,11 @@ async fn test_empty_kont() -> anyhow::Result<()> {
     NyarVM::load_path(&here.join("tests/kont.wat")).await?;
     Ok(())
 }
+
+
+#[tokio::test]
+async fn test_switch() -> anyhow::Result<()> {
+    let here = Path::new(env!("CARGO_MANIFEST_DIR"));
+    NyarVM::load_path(&here.join("tests/switch.wat")).await?;
+    Ok(())
+}
