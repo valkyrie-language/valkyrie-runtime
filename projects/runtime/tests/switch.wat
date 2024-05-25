@@ -41,12 +41,12 @@
         (import "w:unstable/printer" "print-u32" (func $print_u32 (param $value i32)))
         (func $match (param $x i32) (result i32)
             (block $default
-                (block
-                    (block
-                        (block
-                            (block
+                (block $case-3
+                    (block $case-2
+                        (block $case-1
+                            (block $case-0
                                 (local.get $x)
-                                (br_table 3 2 1 0 $default)
+                                (br_table $case-0 $case-1 $case-2 $case-3 $default)
                                 (return (i32.const 99))
                             )
                             (return (i32.const 100))
@@ -60,7 +60,7 @@
             (i32.const 104)
         )
         (func $main
-            (call $match i32.const 6)
+            (call $match i32.const -1)
             (call $print_i32)
         )
         (start $main)
